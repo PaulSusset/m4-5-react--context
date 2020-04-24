@@ -18,68 +18,68 @@ Pass the props through in the following example
 
 ```jsx
 const App = () => {
-  const [user, setUser] = React.useState(null);
+    const [user, setUser] = React.useState(null);
 
-  return (
-    <>
-      <Home />
-      <Sidebar user={user} />
-    </>
-  );
+    return (
+        <>
+            <Home user={user} setUser={setUser} />
+            <Sidebar user={user} />
+        </>
+    );
 };
 
-const Home = () => {
-  return (
-    <>
-      <Header />
-      <MainContent />
-    </>
-  );
+const Home = ({ user, setUser }) => {
+    return (
+        <>
+            <Header user={user} setUser={setUser} />
+            <MainContent />
+        </>
+    );
 };
 
-const Header = () => {
-  return (
-    <header>
-      <Navigation />
-    </header>
-  );
+const Header = ({ user, setUser }) => {
+    return (
+        <header>
+            <Navigation user={user} setUser={setUser} />
+        </header>
+    );
 };
 
-const Navigation = () => {
-  return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        {user ? (
-          <li>
-            <Link to="/log-out">Log out</Link>
-          </li>
-        ) : (
-          <li>
-            <LoginDialogTrigger />
-          </li>
-        )}
-      </ul>
-    </nav>
-  );
+const Navigation = ({ user, setUser }) => {
+    return (
+        <nav>
+            <ul>
+                <li>
+                    <Link to="/">Home</Link>
+                </li>
+                {user ? (
+                    <li>
+                        <Link to="/log-out">Log out</Link>
+                    </li>
+                ) : (
+                    <li>
+                        <LoginDialogTrigger user={user} setUser={setUser} />
+                    </li>
+                )}
+            </ul>
+        </nav>
+    );
 };
 
-const LoginDialogTrigger = () => {
-  // Some stuff to show a button and handle showing
-  // the dialog on click
+const LoginDialogTrigger = ({ user, setUser }) => {
+    // Some stuff to show a button and handle showing
+    // the dialog on click
 
-  return (
-    <form
-      onSubmit={() => {
-        /* Validate that the credentials are right */
-        setUser(user);
-      }}
-    >
-      {/* Imagine a typical login form here */}
-    </form>
-  );
+    return (
+        <form
+            onSubmit={() => {
+                /* Validate that the credentials are right */
+                setUser(user);
+            }}
+        >
+            {/* Imagine a typical login form here */}
+        </form>
+    );
 };
 ```
 
@@ -87,9 +87,9 @@ const LoginDialogTrigger = () => {
 
 This is no fun!
 
-- Pain to wire up
-- Not easy to move components around
-- Makes a big mess
+-   Pain to wire up
+-   Not easy to move components around
+-   Makes a big mess
 
 ---
 
@@ -111,14 +111,14 @@ First, we create a Context, and make it available to the React tree with `<Conte
 export const UserContext = React.createContext(null);
 
 const App = () => {
-  return (
-    <UserContext.Provider value={{ username: 'Alfalfa' }}>
-      <Header />
-      <Main>
-        <YourAppHere />
-      </Main>
-    </UserContext.Provider>
-  );
+    return (
+        <UserContext.Provider value={{ username: "Alfalfa" }}>
+            <Header />
+            <Main>
+                <YourAppHere />
+            </Main>
+        </UserContext.Provider>
+    );
 };
 ```
 
@@ -129,14 +129,14 @@ const App = () => {
 Next, we can _consume_ that context anywhere below the Provider with `useContext`.
 
 ```js
-import { UserContext } from '../App';
+import { UserContext } from "../App";
 
 const Profile = () => {
-  const data = React.useContext(UserContext);
+    const data = React.useContext(UserContext);
 
-  console.log(data); // { username: 'Alfalfa' }
+    console.log(data); // { username: 'Alfalfa' }
 
-  return <div>Logged in as {data.username}.</div>;
+    return <div>Logged in as {data.username}.</div>;
 };
 ```
 
@@ -149,83 +149,95 @@ Update the following components to use context
 ---
 
 ```jsx
+export const UserContext = react.createContext(null)
+
 const App = () => {
-  const [user, setUser] = React.useState({ username: 'Alfalfa' });
+    const [user, setUser] = React.useState({ username: "Alfalfa" });
 
-  return <Home user={user} setUser={setUser} />;
+    return
+      <UserContext.Provider value={{ user, setUser }}>
+        <Home />;
+      </UserContext.Provider>
 };
 
-const Home = ({ user, setUser }) => {
-  return (
-    <>
-      <Header user={user} setUser={setUser} />
-      <MainContent />
-    </>
-  );
+
+const Home = () => {
+    return (
+        <>
+            <Header />
+            <MainContent />
+        </>
+    );
 };
 
-const Header = ({ user, setUser }) => {
-  return (
-    <header>
-      <Navigation user={user} setUser={setUser} />
-    </header>
-  );
+const Header = () => {
+    return (
+        <header>
+            <Navigation />
+        </header>
+    );
 };
 
-const Navigation = ({ user, setUser }) => {
-  return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/about">About</Link>
-        </li>
-        {user && (
-          <li>
-            <button onClick={() => setUser(null)}>Log out</button>
-          </li>
-        )}
-      </ul>
-    </nav>
-  );
+import React, { useContext } from 'react'
+import UserContext from..
+const Navigation = () => {
+  const { user, setUser } = react.useContext(UserContext)
+    return (
+        <nav>
+            <ul>
+                <li>
+                    <Link to="/">Home</Link>
+                </li>
+                <li>
+                    <Link to="/about">About</Link>
+                </li>
+                {user && (
+                    <li>
+                        <button onClick={() => setUser(null)}>Log out</button>
+                    </li>
+                )}
+            </ul>
+        </nav>
+    );
 };
 ```
 
 ---
 
 ```jsx
+export const DialogContext = createContext(null);
 const App = () => {
-  const [dialog, setDialog] = React.useState(null);
+    const [dialog, setDialog] = React.useState(null);
 
-  return (
-    <>
-      <MainContent dialog={dialog} setDialog={setDialog} />
-      <Dialog currentDialog={dialog} />
-    </>
-  );
+    return (
+        <DialogContext value={{ dialog, setDialog }}>
+            <MainContent />
+            <Dialog />
+        </DialogContext>
+    );
 };
 
-const MainContent = ({ dialog, setDialog }) => {
-  return (
-    <>
-      <Sidebar>
-        <Link>Home</Link>
-        <Link>About</Link>
-        <LogInButton afterLogin={() => setDialog('login-success')} />
-      </Sidebar>
-      <Main>Stuff</Main>
-    </>
-  );
+const MainContent = () => {
+    const { setDialog } = useContext(DialogContext);
+    return (
+        <>
+            <Sidebar>
+                <Link>Home</Link>
+                <Link>About</Link>
+                <LogInButton afterLogin={() => setDialog("login-success")} />
+            </Sidebar>
+            <Main>Stuff</Main>
+        </>
+    );
 };
 
-const Dialog = ({ currentDialog }) => {
-  if (!currentDialog) {
-    return null;
-  }
+const Dialog = () => {
+    const currentDialog = useContext(DialogContext).dialog;
+    if (!currentDialog) {
+        return null;
+    }
 
-  return <div>{/* Do stuff with currentDialog */}</div>;
+    return <div>{/* Do stuff with currentDialog */}</div>;
 };
 ```
 
@@ -233,58 +245,58 @@ const Dialog = ({ currentDialog }) => {
 
 ```js live=true
 const App = () => {
-  const [count, setCount] = React.useState(0);
-  const [name, setName] = React.useState('');
+    const [count, setCount] = React.useState(0);
+    const [name, setName] = React.useState("");
 
-  const increment = () => setCount(count + 1);
-  const decrement = () => setCount(count - 1);
+    const increment = () => setCount(count + 1);
+    const decrement = () => setCount(count - 1);
 
-  return (
-    <>
-      Playing as: {name}
-      <CountDisplay count={count} />
-      <Actions
-        increment={increment}
-        decrement={decrement}
-        name={name}
-        setName={setName}
-      />
-    </>
-  );
+    return (
+        <>
+            Playing as: {name}
+            <CountDisplay count={count} />
+            <Actions
+                increment={increment}
+                decrement={decrement}
+                name={name}
+                setName={setName}
+            />
+        </>
+    );
 };
 
 const CountDisplay = ({ count }) => {
-  return <h1>{count} clicks!</h1>;
+    return <h1>{count} clicks!</h1>;
 };
 
 const Actions = ({ increment, decrement, name, setName }) => {
-  return (
-    <div>
-      <TextInput label="Name" value={name} setValue={setName} />
+    return (
+        <div>
+            <TextInput label="Name" value={name} setValue={setName} />
 
-      <Action onClick={increment}>Increment</Action>
-      <Action onClick={decrement}>Decrement</Action>
-    </div>
-  );
+            <Action onClick={increment}>Increment</Action>
+            <Action onClick={decrement}>Decrement</Action>
+        </div>
+    );
 };
 
 // NO NEED TO TWEAK ANYTHING BELOW THIS POINT
 
 const Action = ({ onClick, children }) => {
-  return <button onClick={onClick}>{children}</button>;
+    return <button onClick={onClick}>{children}</button>;
 };
 
 const TextInput = ({ label, value, setValue }) => {
-  return (
-    <label>
-      {label}
-      <input
-        type="text"
-        value={value}
-        onChange={ev => setValue(ev.target.value)}
-      />
-    </label>
-  );
+    return (
+        <label>
+            {label}
+            <input
+                type="text"
+                value={value}
+                onChange={ev => setValue(ev.target.value)}
+            />
+        </label>
+    );
 };
 
 render(<App />);
