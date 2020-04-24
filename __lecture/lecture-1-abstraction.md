@@ -18,29 +18,29 @@ Here are two different React components being used:
 
 ```js
 <Dashboard
-  currentUser={isAuthorized ? currentUser : null}
-  metrics={{
-    views: data.views,
-    uniques: data.uniques,
-    bounceRate: data.bounceRate
-  }}
-  handleLogOut={() => logOutCurrentUser(currentUser)}
-  sidePanel={
-    <UserActions
-      currentUser={currentUser}
-      handleBanUser={actions.banUser}
-      handleChangeRole={actions.changeRole}
-    />
-  }
+    currentUser={isAuthorized ? currentUser : null}
+    metrics={{
+        views: data.views,
+        uniques: data.uniques,
+        bounceRate: data.bounceRate
+    }}
+    handleLogOut={() => logOutCurrentUser(currentUser)}
+    sidePanel={
+        <UserActions
+            currentUser={currentUser}
+            handleBanUser={actions.banUser}
+            handleChangeRole={actions.changeRole}
+        />
+    }
 />
 ```
 
 ---
 
-- How generic are these components?
-- How specific to _our_ application are they? Could I copy/paste this into another project?
-- How many instances of each component do I expect I'll need?
-- How much _state_ is involved with each component?
+-   How generic are these components?
+-   How specific to _our_ application are they? Could I copy/paste this into another project?
+-   How many instances of each component do I expect I'll need?
+-   How much _state_ is involved with each component?
 
 ---
 
@@ -64,17 +64,17 @@ There is a _spectrum_ from "concrete" to "abstract":
 
 ## "Concrete" components are:
 
-- Reusable
-- Generic
-- Flexible
+-   Reusable
+-   Generic
+-   Flexible
 
 ---
 
 ## "Abstract" components are:
 
-- tied into our application
-- one-off
-- rigid
+-   tied into our application
+-   one-off
+-   rigid
 
 <!--
   To elaborate a little here: abstract items tend to be very high-level.
@@ -103,18 +103,18 @@ The following components are blurry in terms of their abstraction. Let's address
 
 ```js
 const Banner = ({ type, message, user }) => {
-  const bg = type === 'success' ? 'green' : 'red';
+    const bg = type === "success" ? "green" : "red";
 
-  // Only logged in users are allowed to see the banner
-  if (!user) {
-    return null;
-  }
+    // Only logged in users are allowed to see the banner
+    if (!user) {
+        return null;
+    }
 
-  return (
-    <div style={{ backgroundColor: bg }}>
-      Notification from HelloPets.com: {message}
-    </div>
-  );
+    return (
+        <div style={{ backgroundColor: bg }}>
+            Notification from HelloPets.com: {message}
+        </div>
+    );
 };
 ```
 
@@ -122,39 +122,39 @@ const Banner = ({ type, message, user }) => {
 
 ```js
 const ContactPage = () => {
-  const [message, setMessage] = React.useState('');
-  const [messageError, setMessageError] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [messageError, setMessageError] = React.useState(false);
 
-  return (
-    <div>
-      <Header />
+    return (
+        <div>
+            <Header />
 
-      <h1>Contact Us</h1>
-      <p>
-        We're looking forward to hearing from you. Please fill in this contact
-        form:
-      </p>
+            <h1>Contact Us</h1>
+            <p>
+                We're looking forward to hearing from you. Please fill in this
+                contact form:
+            </p>
 
-      <label>
-        Message:
-        <textarea
-          value={message}
-          onChange={ev => {
-            setMessage(ev.target.value);
+            <label>
+                Message:
+                <textarea
+                    value={message}
+                    onChange={ev => {
+                        setMessage(ev.target.value);
 
-            if (ev.target.value.length < 100) {
-              setMessageError(true);
-            } else {
-              setMessageError(false);
-            }
-          }}
-        />
-      </label>
-      {messageError && (
-        <p className="error">Please enter at least 100 characters.</p>
-      )}
-    </div>
-  );
+                        if (ev.target.value.length < 100) {
+                            setMessageError(true);
+                        } else {
+                            setMessageError(false);
+                        }
+                    }}
+                />
+            </label>
+            {messageError && (
+                <p className="error">Please enter at least 100 characters.</p>
+            )}
+        </div>
+    );
 };
 ```
 

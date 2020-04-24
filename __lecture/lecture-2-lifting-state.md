@@ -20,32 +20,32 @@ Sometimes, you'll want to share data with a sibling component.
 
 ```js
 const App = () => {
-  return (
-    <>
-      <Header />
-      <MainContent />
-    </>
-  );
+    return (
+        <>
+            <Header />
+            <MainContent />
+        </>
+    );
 };
 
 const Header = () => {
-  const [searchTerm, setSearchTerm] = React.useState('');
+    const [searchTerm, setSearchTerm] = React.useState("");
 
-  return (
-    <header>
-      <Logo />
-      <SearchInput value={searchTerm} onChange={setSearchTerm} />
-    </header>
-  );
+    return (
+        <header>
+            <Logo />
+            <SearchInput value={searchTerm} onChange={setSearchTerm} />
+        </header>
+    );
 };
 
 const MainContent = () => {
-  return (
-    <main>
-      {/* how do I access `searchTerm`? */}
-      Search results for {searchTerm}
-    </main>
-  );
+    return (
+        <main>
+            {/* how do I access `searchTerm`? */}
+            Search results for {searchTerm}
+        </main>
+    );
 };
 ```
 
@@ -59,38 +59,38 @@ Solve me:
 
 ```js
 const App = () => {
-  return (
-    <>
-      <Header />
-      <MainContent />
-    </>
-  );
+    return (
+        <>
+            <Header />
+            <MainContent />
+        </>
+    );
 };
 
 const Header = () => {
-  const [searchTerm, setSearchTerm] = React.useState('');
+    const [searchTerm, setSearchTerm] = React.useState("");
 
-  return (
-    <header>
-      <Logo />
-      <SearchInput value={searchTerm} onChange={setSearchTerm} />
-    </header>
-  );
+    return (
+        <header>
+            <Logo />
+            <SearchInput value={searchTerm} onChange={setSearchTerm} />
+        </header>
+    );
 };
 
 const MainContent = () => {
-  return (
-    <main>
-      {/* how do I access `searchTerm`? */}
-      Search results for {searchTerm}
-    </main>
-  );
+    return (
+        <main>
+            {/* how do I access `searchTerm`? */}
+            Search results for {searchTerm}
+        </main>
+    );
 };
 ```
 
 ---
 
-<!-- 
+<!--
 # Exercise
 
 Lift state up
@@ -195,7 +195,7 @@ const SearchResults = () => {
     />
   ))
 }
-``` 
+```
 
 ---
 -->

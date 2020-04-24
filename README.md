@@ -20,15 +20,15 @@ The product manager comes to your desk, and tells you that there are two new req
 
 2. Similarly: if you close and reopen the tab, you shouldn't be reset to 1000 cookies! We want to ensure that the progress is saved and restored.
 
-This exercuse is left as an exercise. The main goal of this exercise is to **create connections in your brain**, to deepen your understanding of React, and the best way to do that is to puzzle it out.
+This exercise is left as an exercise. The main goal of this exercise is to **create connections in your brain**, to deepen your understanding of React, and the best way to do that is to puzzle it out.
 
 (That said, if you're stuck for 15+ minutes, please do ask for help!)
 
 #### Hints
 
-- For lifting state up, you'll want to pull all the state up into `App`, and then pass it down via props.
-- The list of `items` can be pulled into a `data.js` file, and imported in both `App` and `Game`.
-- For persisting across closing and reopening the tab, you can use the localStorage API. You can create a `usePersistedState` hook, which works exactly the same as the `React.useState` hook, but which also stores the value in localStorage on every update, and reads the initial value from localStorage. It should be used like this:
+-   For lifting state up, you'll want to pull all the state up into `App`, and then pass it down via props.
+-   The list of `items` can be pulled into a `data.js` file, and imported in both `App` and `Game`.
+-   For persisting across closing and reopening the tab, you can use the localStorage API. You can create a `usePersistedState` hook, which works exactly the same as the `React.useState` hook, but which also stores the value in localStorage on every update, and reads the initial value from localStorage. It should be used like this:
 
 ```js
 const [numCookies, setNumCookies] = usePersistedState(1000, "num-cookies");
@@ -52,7 +52,7 @@ We will also want to create a provider component, and export it:
 
 ```js
 export const GameProvider = ({ children }) => {
-  return <GameContext.Provider value={{}}>{children}</GameContext.Provider>;
+    return <GameContext.Provider value={{}}>{children}</GameContext.Provider>;
 };
 ```
 
@@ -95,42 +95,42 @@ Your `GameProvider` component should look something like this:
 
 ```jsx
 export const GameProvider = ({ children }) => {
-  const [numCookies, setNumCookies] = usePersistedState("numCookies", 1000);
+    const [numCookies, setNumCookies] = usePersistedState("numCookies", 1000);
 
-  const [purchasedItems, setPurchasedItems] = usePersistedState(
-    "purchasedItems",
-    {
-      cursor: 0,
-      grandma: 0,
-      farm: 0
-    }
-  );
+    const [purchasedItems, setPurchasedItems] = usePersistedState(
+        "purchasedItems",
+        {
+            cursor: 0,
+            grandma: 0,
+            farm: 0
+        }
+    );
 
-  const calculateCookiesPerSecond = purchasedItems => {
-    /* logic */
-  };
+    const calculateCookiesPerSecond = purchasedItems => {
+        /* logic */
+    };
 
-  return (
-    <GameContext.Provider
-      value={{
-        numCookies,
-        setNumCookies,
-        purchasedItems,
-        setPurchasedItems,
-        cookiesPerSecond: calculateCookiesPerSecond(purchasedItems)
-      }}
-    >
-      {children}
-    </GameContext.Provider>
-  );
+    return (
+        <GameContext.Provider
+            value={{
+                numCookies,
+                setNumCookies,
+                purchasedItems,
+                setPurchasedItems,
+                cookiesPerSecond: calculateCookiesPerSecond(purchasedItems)
+            }}
+        >
+            {children}
+        </GameContext.Provider>
+    );
 };
 ```
 
 It's important to note that this is the house for _all things related to game state_:
 
-- The state itself, `numCookies` and `purchasedItems`
-- The setter functions, `setNumCookies` and `setPurchasedItems`
-- Additional helpers like `cookiesPerSecond`.
+-   The state itself, `numCookies` and `purchasedItems`
+-   The setter functions, `setNumCookies` and `setPurchasedItems`
+-   Additional helpers like `cookiesPerSecond`.
 
 That said, it _doesn't_ include the interval that grants the user cookies every second. This will remain in `App`, since that loop actually _does something_ with the state.
 
@@ -142,8 +142,8 @@ We'll see how to consume it to power our interval that grants the user cookies e
 
 ```js
 useInterval(() => {
-  const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
-  setNumCookies(numCookies + numOfGeneratedCookies);
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    setNumCookies(numCookies + numOfGeneratedCookies);
 }, 1000);
 ```
 
@@ -179,27 +179,27 @@ We'll import the GameContext, pluck out the relevant data, and update the interv
 import { GameContext } from "./GameContext";
 
 function App(props) {
-  const { numCookies, setNumCookies, cookiesPerSecond } = React.useContext(
-    GameContext
-  );
+    const { numCookies, setNumCookies, cookiesPerSecond } = React.useContext(
+        GameContext
+    );
 
-  useInterval(() => {
-    setNumCookies(numCookies + cookiesPerSecond);
-  }, 1000);
+    useInterval(() => {
+        setNumCookies(numCookies + cookiesPerSecond);
+    }, 1000);
 
-  return (
-    <>
-      <GlobalStyles />
-      <Router>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/game">
-          <Game />
-        </Route>
-      </Router>
-    </>
-  );
+    return (
+        <>
+            <GlobalStyles />
+            <Router>
+                <Route exact path="/">
+                    <Home />
+                </Route>
+                <Route path="/game">
+                    <Game />
+                </Route>
+            </Router>
+        </>
+    );
 }
 ```
 
